@@ -229,6 +229,7 @@ def annotate(row, wv_cased):
             question_tokens, context, context_token_span) + row[3:]
 
 
+# index for ans
 def index_answer(row):
     token_span = row[-4]
     starts, ends = zip(*token_span)
@@ -240,12 +241,14 @@ def index_answer(row):
         return row[:-3] + (None, None)
 
 
+#build vocab for model
 def build_vocab(questions, contexts, wv_vocab, sort_all=False):
     """
     Build vocabulary sorted by global word frequency, or consider frequencies in questions first,
     which is controlled by `args.sort_all`.
     """
     if sort_all:
+        #conter same bow
         counter = collections.Counter(w for doc in questions + contexts for w in doc)
         vocab = sorted([t for t in counter if t in wv_vocab], key=counter.get, reverse=True)
     else:
